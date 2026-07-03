@@ -14,6 +14,16 @@ from pathlib import Path
 
 import pandas as pd
 
+# Let this file be run directly (python src/data.py) as a quick check, while
+# still importing cleanly as part of the package. Run directly there's no parent
+# package for the "from .utils" import, so we put the repo root on the path and
+# name the package ourselves.
+if __package__ in (None, ""):
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    __package__ = "src"
+
 from .utils import ID_COLUMN, N_WEEKS, RAW_PAYMENTS_PATH, WEEK_COLUMNS
 
 # Placeholder tokens that represent "no payment recorded" in the raw file.
@@ -171,3 +181,10 @@ def load_payments(
     if return_report:
         return df, report
     return df
+
+
+if __name__ == "__main__":
+    # Quick sanity check: load the real dataset and print the quality report.
+    _df, _report = load_payments(return_report=True)
+    print(_report.summary())
+    print(_df.iloc[:3, :5])

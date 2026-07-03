@@ -12,3 +12,6 @@ seaborn>=0.12
 
 # Notebooks
 jupyter>=1.0
+
+# Tests
+pytest>=7.0
