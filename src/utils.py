@@ -25,6 +25,22 @@ LOAN_WEEKS: int = 13
 ID_COLUMN: str = "farmer_no"
 WEEK_COLUMNS: list[str] = [f"week{i}" for i in range(1, N_WEEKS + 1)]
 
+# Lending policy knobs. The bank can only claw back part of each weekly payment,
+# so a loan is repayable out of DEDUCTION_RATE * (sum of the next 13 payments).
+# We size loans off a pessimistic percentile of the simulated payment stream.
+DEDUCTION_RATE: float = 0.40
+DOWNSIDE_PERCENTILE: int = 10
+N_SIMULATIONS: int = 5000
+
+# Risk score cutoffs (score runs 0..1, higher = safer).
+BAND_LOW_MIN: float = 0.60      # >= this -> "Low" risk
+BAND_MEDIUM_MIN: float = 0.35   # >= this -> "Medium"; below -> "High" (reject)
+
+
+def week_columns(n: int) -> list[str]:
+    """Column names for the first ``n`` weeks (``week1..week{n}``)."""
+    return [f"week{i}" for i in range(1, n + 1)]
+
 
 def ensure_dir(path: Path) -> Path:
     """Create ``path`` (and parents) if it does not exist and return it."""
