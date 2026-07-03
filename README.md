@@ -55,10 +55,16 @@ everything.
 
 ## Running
 
+Drop the dataset at `data/raw/payments.csv`, then from the `loan-risk` folder:
+
+```
+./setup.sh        # makes the venv, installs deps, trains and scores in one go
+```
+
+or step by step (see SETUP.md for the details, including `make` targets):
+
 ```
 pip install -r requirements.txt
-# drop the dataset at data/raw/payments.csv
-
 python scripts/train.py   # fit the scorer, save it to models/
 python scripts/score.py   # score every farmer, write reports/loan_recommendations.csv
 pytest                    # run the tests
